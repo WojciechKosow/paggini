@@ -12,27 +12,21 @@ export default function PageHeader({
   lead?: string;
 }) {
   return (
-    <header className="relative overflow-hidden page-top pb-12">
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div
-          className="animate-aurora absolute -top-32 left-1/3 h-[34rem] w-[34rem] rounded-full opacity-40 blur-[130px]"
-          style={{ background: "radial-gradient(circle,rgba(139,92,246,0.5),transparent 60%)" }}
-        />
-        <div className="bg-grid mask-fade absolute inset-0 opacity-25" />
-      </div>
-      <div className="mx-auto max-w-6xl px-5">
-        <Reveal className="max-w-3xl">
-          <div className="eyebrow">{eyebrow}</div>
-          <h1 className="font-display mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
+    <header className="relative overflow-hidden page-top pb-14">
+      <div className="grid-lines pointer-events-none absolute inset-0 opacity-50" />
+      <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8">
+        <Reveal className="border-b border-line-2 pb-10">
+          <div className="label">[ {eyebrow} ]</div>
+          <h1 className="display mt-5 max-w-4xl text-5xl leading-[0.95] sm:text-7xl lg:text-8xl">
             {title}
             {titleAccent && (
               <>
                 {" "}
-                <span className="text-gradient">{titleAccent}</span>
+                <span className="serif-i flame">{titleAccent}</span>
               </>
             )}
           </h1>
-          {lead && <p className="mt-6 max-w-2xl text-lg leading-relaxed text-mist">{lead}</p>}
+          {lead && <p className="mt-7 max-w-2xl text-lg leading-relaxed text-ink-soft">{lead}</p>}
         </Reveal>
       </div>
     </header>

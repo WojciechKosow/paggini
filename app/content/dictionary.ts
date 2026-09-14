@@ -32,6 +32,8 @@ export type Dictionary = {
   };
   hero: {
     badge: string;
+    kicker: string;
+    words: string[];
     titleLead: string;
     titleMid: string;
     titleAccent: string;

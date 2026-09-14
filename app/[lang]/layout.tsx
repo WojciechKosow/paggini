@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Sora, Instrument_Serif } from "next/font/google";
+import { Geist, Bricolage_Grotesque, Space_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../globals.css";
 import { getDictionary } from "./dictionaries";
@@ -12,6 +12,7 @@ import {
 } from "../content/site";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import Cursor from "../components/Cursor";
 
 // `latin-ext` is required for Polish diacritics (ą ć ę ł ń ó ś ź ż).
 const geistSans = Geist({
@@ -20,18 +21,18 @@ const geistSans = Geist({
   display: "swap",
 });
 
-const sora = Sora({
-  variable: "--font-sora",
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
   subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
-const instrument = Instrument_Serif({
-  variable: "--font-instrument",
-  subsets: ["latin", "latin-ext"],
-  weight: "400",
-  style: "italic",
+// Space Mono ships only `latin` (no `latin-ext`); mono text is kept ASCII-only.
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
+  subsets: ["latin"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -82,12 +83,13 @@ export default async function LocaleLayout(props: LayoutProps<"/[lang]">) {
   return (
     <html
       lang={locale}
-      className={`${geistSans.variable} ${sora.variable} ${instrument.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${bricolage.variable} ${spaceMono.variable} h-full antialiased`}
     >
       <body className="min-h-full">
         <a href="#main" className="skip-link">
           {locale === "pl" ? "Przejdź do treści" : "Skip to content"}
         </a>
+        <Cursor />
         <Nav lang={locale} dict={dict} />
         <main id="main">{props.children}</main>
         <Footer lang={locale} dict={dict} />

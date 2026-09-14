@@ -1,157 +1,84 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { href, type Locale } from "../content/site";
+import Magnetic from "./Magnetic";
+import { href, contact, type Locale } from "../content/site";
 import type { Dictionary } from "../content/dictionary";
 
-function useCountUp(target: number, run: boolean, duration = 1400) {
-  const [value, setValue] = useState(0);
-  useEffect(() => {
-    if (!run) return;
-    let raf = 0;
-    const start = performance.now();
-    const tick = (now: number) => {
-      const t = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
-      setValue(Math.round(target * eased));
-      if (t < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [target, run, duration]);
-  return value;
-}
-
-function Stat({
-  value,
-  suffix,
-  label,
-  run,
-}: {
-  value: string;
-  suffix: string;
-  label: string;
-  run: boolean;
-}) {
-  const numeric = /^\d+$/.test(value);
-  const n = useCountUp(numeric ? parseInt(value, 10) : 0, run && numeric);
-  return (
-    <div>
-      <div className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
-        {numeric ? n : value}
-        {suffix && <span className="text-gradient">{suffix}</span>}
-      </div>
-      <div className="mt-1 text-sm text-mist">{label}</div>
-    </div>
-  );
-}
-
 export default function Hero({ lang, dict }: { lang: Locale; dict: Dictionary }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [statsRun, setStatsRun] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    let frame = 0;
-    const onMove = (e: MouseEvent) => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        const x = (e.clientX / window.innerWidth - 0.5) * 2;
-        const y = (e.clientY / window.innerHeight - 0.5) * 2;
-        el.style.setProperty("--px", `${x * 22}px`);
-        el.style.setProperty("--py", `${y * 22}px`);
-      });
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(frame);
-    };
-  }, []);
-
-  useEffect(() => {
-    const t = setTimeout(() => setStatsRun(true), 500);
-    return () => clearTimeout(t);
-  }, []);
-
   const h = dict.hero;
 
   return (
-    <section ref={ref} className="relative overflow-hidden pt-40 pb-24">
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div
-          className="animate-aurora absolute -top-40 left-1/2 h-[46rem] w-[46rem] -translate-x-1/2 rounded-full opacity-60 blur-[120px]"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(139,92,246,0.55), transparent 60%)",
-            transform: "translate(calc(-50% + var(--px,0px)), var(--py,0px))",
-          }}
-        />
-        <div
-          className="animate-aurora-2 absolute -right-24 top-24 h-[32rem] w-[32rem] rounded-full opacity-50 blur-[120px]"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(34,211,238,0.45), transparent 60%)",
-          }}
-        />
-        <div
-          className="animate-aurora absolute -left-24 top-40 h-[30rem] w-[30rem] rounded-full opacity-40 blur-[120px]"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(217,70,239,0.45), transparent 60%)",
-          }}
-        />
-        <div className="bg-grid mask-fade absolute inset-0 opacity-[0.35]" />
-      </div>
+    <section className="relative overflow-hidden">
+      <div className="grid-lines pointer-events-none absolute inset-0 opacity-60" />
 
-      <div className="mx-auto max-w-6xl px-5">
-        <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-          <div
-            className="inline-flex items-center gap-2 rounded-full border border-line bg-white/[0.03] px-4 py-1.5 text-xs text-mist"
-            style={{ animation: "pop-in 0.8s both" }}
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-            </span>
+      <div className="relative mx-auto max-w-[1400px] px-5 pb-14 pt-32 sm:px-8 sm:pt-40">
+        {/* meta bar */}
+        <div className="anim-fade-up flex flex-wrap items-center justify-between gap-3 border-b border-line-2 pb-5">
+          <span className="label">{h.kicker}</span>
+          <span className="label hidden sm:block">{contact.location[lang]}</span>
+          <span className="label flex items-center gap-2">
+            <span className="inline-block h-2 w-2 animate-pulse bg-flame" />
             {h.badge}
-          </div>
+          </span>
+        </div>
 
-          <h1
-            className="font-display mt-7 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl"
-            style={{ animation: "pop-in 0.9s 0.05s both" }}
-          >
-            <span className="text-gradient-soft">{h.titleLead}</span>
-            <br />
-            {h.titleMid}{" "}
-            <span className="accent-serif text-gradient">{h.titleAccent}</span>.
+        {/* headline */}
+        <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:gap-10">
+          <h1 className="display col-span-12 lg:col-span-8">
+            {h.words.map((w, i) => (
+              <span key={w} className="rise-mask">
+                <span
+                  className="anim-rise block"
+                  style={{
+                    animationDelay: `${i * 110}ms`,
+                    fontSize: "clamp(2.9rem, 11vw, 10.5rem)",
+                  }}
+                >
+                  {w.replace(/\.$/, "")}
+                  <span className="flame">.</span>
+                </span>
+              </span>
+            ))}
           </h1>
 
-          <p
-            className="mt-6 max-w-xl text-lg leading-relaxed text-mist"
-            style={{ animation: "pop-in 1s 0.15s both" }}
-          >
-            {h.lead}
-          </p>
+          <div className="col-span-12 flex flex-col justify-end lg:col-span-4">
+            <p
+              className="anim-fade-up max-w-sm text-lg leading-relaxed text-ink-soft"
+              style={{ animationDelay: "400ms" }}
+            >
+              {h.lead}
+            </p>
 
-          <div
-            className="mt-9 flex flex-col items-center gap-3 sm:flex-row"
-            style={{ animation: "pop-in 1.1s 0.25s both" }}
-          >
-            <Link href={href(lang, "work")} className="btn btn-primary w-full sm:w-auto">
-              {h.ctaPrimary}
-            </Link>
-            <Link href={href(lang, "contact")} className="btn btn-ghost w-full sm:w-auto">
-              {h.ctaSecondary}
-            </Link>
+            <div
+              className="anim-fade-up mt-8 flex flex-col gap-3 sm:flex-row"
+              style={{ animationDelay: "540ms" }}
+            >
+              <Magnetic>
+                <Link href={href(lang, "work")} className="btn btn-ink px-7">
+                  {h.ctaPrimary}
+                </Link>
+              </Magnetic>
+              <Magnetic>
+                <Link href={href(lang, "contact")} className="btn btn-line px-7">
+                  {h.ctaSecondary}
+                </Link>
+              </Magnetic>
+            </div>
           </div>
         </div>
 
-        <div className="mx-auto mt-20 grid max-w-4xl grid-cols-2 gap-8 border-t border-line pt-10 md:grid-cols-4">
+        {/* stats */}
+        <div
+          className="anim-fade-up mt-16 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line-2 pt-10 md:grid-cols-4"
+          style={{ animationDelay: "640ms" }}
+        >
           {h.stats.map((s) => (
-            <Stat key={s.label} {...s} run={statsRun} />
+            <div key={s.label} className="flex flex-col gap-1">
+              <div className="display text-4xl font-extrabold sm:text-5xl">
+                {s.value}
+                {s.suffix && <span className="flame">{s.suffix}</span>}
+              </div>
+              <div className="label">{s.label}</div>
+            </div>
           ))}
         </div>
       </div>

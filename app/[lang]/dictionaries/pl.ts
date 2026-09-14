@@ -35,6 +35,8 @@ const pl: Dictionary = {
 
   hero: {
     badge: "Wolne terminy — przyjmujemy nowe projekty",
+    kicker: "Studio stron, sklepów i aplikacji",
+    words: ["Strony.", "Sklepy.", "Aplikacje."],
     titleLead: "Strony, sklepy",
     titleMid: "i aplikacje, które",
     titleAccent: "robią różnicę",

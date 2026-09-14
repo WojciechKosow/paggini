@@ -30,51 +30,36 @@ export default function ContactForm({ dict }: { dict: Dictionary }) {
   };
 
   const fieldClass =
-    "mt-2 w-full rounded-xl border border-line bg-white/[0.03] px-4 py-3 text-sm text-chalk placeholder:text-mist-dim transition-colors focus:border-violet-400";
-  const labelClass = "text-sm font-medium text-chalk";
+    "mt-2 w-full border border-ink/25 bg-card px-4 py-3 text-sm text-ink placeholder:text-muted transition-colors focus:border-flame";
+  const labelClass = "mono text-[10px] uppercase tracking-wider text-muted";
 
   return (
-    <form onSubmit={onSubmit} className="card p-6 sm:p-8">
-      <div className="font-display text-lg font-semibold">{f.title}</div>
+    <form onSubmit={onSubmit} className="panel p-6 sm:p-8">
+      <div className="display text-xl">{f.title}</div>
 
       <div className="mt-6 grid gap-5 sm:grid-cols-2">
         <label className="block">
           <span className={labelClass}>{f.name}</span>
-          <input
-            name="name"
-            type="text"
-            required
-            autoComplete="name"
-            placeholder={f.namePlaceholder}
-            className={fieldClass}
-          />
+          <input name="name" type="text" required autoComplete="name" placeholder={f.namePlaceholder} className={fieldClass} />
         </label>
         <label className="block">
           <span className={labelClass}>{f.email}</span>
-          <input
-            name="email"
-            type="email"
-            required
-            autoComplete="email"
-            placeholder={f.emailPlaceholder}
-            className={fieldClass}
-          />
+          <input name="email" type="email" required autoComplete="email" placeholder={f.emailPlaceholder} className={fieldClass} />
         </label>
       </div>
 
       <div className="mt-5">
         <span className={labelClass}>{f.projectType}</span>
-        <div className="mt-2 flex flex-wrap gap-2">
-          {f.types.map((t) => (
+        <div className="mono mt-2 flex flex-wrap gap-0 border border-ink text-xs">
+          {f.types.map((t, i) => (
             <button
               key={t}
               type="button"
               onClick={() => setType(t)}
-              className={`rounded-full border px-4 py-2 text-sm transition-all ${
-                type === t
-                  ? "border-transparent bg-chalk text-ink"
-                  : "border-line text-mist hover:border-line-strong hover:text-chalk"
-              }`}
+              data-cursor
+              className={`px-3 py-2.5 uppercase tracking-wider transition-colors ${
+                i > 0 ? "border-l border-ink" : ""
+              } ${type === t ? "bg-ink text-paper" : "text-ink hover:bg-card"}`}
             >
               {t}
             </button>
@@ -84,19 +69,13 @@ export default function ContactForm({ dict }: { dict: Dictionary }) {
 
       <label className="mt-5 block">
         <span className={labelClass}>{f.message}</span>
-        <textarea
-          name="message"
-          rows={5}
-          required
-          placeholder={f.messagePlaceholder}
-          className={`${fieldClass} resize-none`}
-        />
+        <textarea name="message" rows={5} required placeholder={f.messagePlaceholder} className={`${fieldClass} resize-none`} />
       </label>
 
-      <button type="submit" className="btn btn-primary mt-6 w-full">
+      <button type="submit" className="btn btn-ink mt-6 w-full">
         {f.submit}
       </button>
-      <p className="mt-3 text-center text-xs text-mist">{f.note}</p>
+      <p className="mt-3 text-center text-xs text-muted">{f.note}</p>
     </form>
   );
 }

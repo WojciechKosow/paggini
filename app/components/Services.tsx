@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Reveal from "./Reveal";
 import { mockupFor } from "./Mockups";
-import { Icon } from "./Icons";
 import { href, type Locale } from "../content/site";
 import type { Dictionary } from "../content/dictionary";
 
@@ -15,57 +14,65 @@ export default function Services({
   heading?: boolean;
 }) {
   const s = dict.services;
+
   return (
-    <section className="relative py-28 sm:py-32">
-      <div className="mx-auto max-w-6xl px-5">
+    <section className="relative py-24 sm:py-32">
+      <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         {heading && (
-          <Reveal className="mx-auto max-w-2xl text-center">
-            <div className="eyebrow">{s.eyebrow}</div>
-            <h2 className="font-display mt-4 text-3xl font-bold tracking-tight sm:text-5xl">
-              {s.title} <span className="text-gradient">{s.titleAccent}</span>
-            </h2>
-            <p className="mt-4 text-lg text-mist">{s.lead}</p>
+          <Reveal className="flex flex-col justify-between gap-6 border-b border-line-2 pb-8 sm:flex-row sm:items-end">
+            <div>
+              <div className="label">[ {s.eyebrow} ]</div>
+              <h2 className="display mt-4 max-w-xl text-4xl sm:text-6xl">
+                {s.title}
+                <br />
+                {s.titleAccent}
+              </h2>
+            </div>
+            <p className="max-w-xs text-ink-soft">{s.lead}</p>
           </Reveal>
         )}
 
-        <div className="mt-24 space-y-28">
+        <div className="mt-8">
           {s.items.map((item, i) => {
             const reverse = i % 2 === 1;
+            const kicker = item.tag.replace(/^\s*\d+\s*[—–-]\s*/, "");
             return (
               <div
                 key={item.title}
-                className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20"
+                className="grid items-center gap-10 border-b border-line py-16 lg:grid-cols-2 lg:gap-20 lg:py-20"
               >
-                <Reveal className={reverse ? "lg:order-2" : ""} delay={80}>
-                  <div className="eyebrow text-gradient">{item.tag}</div>
-                  <h3 className="font-display mt-4 text-2xl font-bold tracking-tight sm:text-4xl">
-                    {item.title}
-                  </h3>
-                  <p className="mt-4 max-w-md text-lg leading-relaxed text-mist">
+                <Reveal className={reverse ? "lg:order-2" : ""}>
+                  <div className="flex items-center gap-4">
+                    <span className="display text-5xl text-flame">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="mono text-xs text-muted">/ {kicker}</span>
+                  </div>
+                  <h3 className="display mt-6 text-3xl sm:text-5xl">{item.title}</h3>
+                  <p className="mt-5 max-w-md text-lg leading-relaxed text-ink-soft">
                     {item.desc}
                   </p>
-                  <ul className="mt-7 space-y-3">
+                  <ul className="mt-8 divide-y divide-line border-y border-line">
                     {item.points.map((p) => (
-                      <li key={p} className="flex items-center gap-3 text-chalk">
-                        <span className="flex h-6 w-6 items-center justify-center rounded-full border border-line bg-white/[0.03] text-gradient">
-                          <Icon name="check" className="h-3.5 w-3.5" />
-                        </span>
-                        {p}
+                      <li key={p} className="flex items-center gap-3 py-3">
+                        <span className="h-1.5 w-1.5 bg-flame" />
+                        <span className="text-ink">{p}</span>
                       </li>
                     ))}
                   </ul>
                   <Link
                     href={href(lang, "contact")}
-                    className="group mt-8 inline-flex items-center gap-2 text-sm font-semibold text-chalk"
+                    data-cursor
+                    className="group mt-8 inline-flex items-center gap-2 text-sm font-semibold"
                   >
-                    <span className="border-b border-transparent transition-colors group-hover:border-violet-400">
-                      {s.cta}
+                    <span className="underline-flame pb-0.5">{s.cta}</span>
+                    <span className="text-flame transition-transform group-hover:translate-x-1">
+                      →
                     </span>
-                    <span className="transition-transform group-hover:translate-x-1">→</span>
                   </Link>
                 </Reveal>
 
-                <Reveal className={reverse ? "lg:order-1" : ""} delay={reverse ? 0 : 160}>
+                <Reveal className={reverse ? "lg:order-1" : ""} delay={120}>
                   {mockupFor(item.kind)}
                 </Reveal>
               </div>

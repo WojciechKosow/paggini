@@ -18,12 +18,12 @@ export default function Nav({ lang, dict }: { lang: Locale; dict: Dictionary }) 
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const links: { key: RouteKey; label: string }[] = [
-    { key: "services", label: dict.nav.services },
-    { key: "work", label: dict.nav.work },
-    { key: "about", label: dict.nav.about },
-    { key: "process", label: dict.nav.process },
-    { key: "contact", label: dict.nav.contact },
+  const links: { key: RouteKey; label: string; n: string }[] = [
+    { key: "services", label: dict.nav.services, n: "01" },
+    { key: "work", label: dict.nav.work, n: "02" },
+    { key: "about", label: dict.nav.about, n: "03" },
+    { key: "process", label: dict.nav.process, n: "04" },
+    { key: "contact", label: dict.nav.contact, n: "05" },
   ];
 
   const isActive = (key: RouteKey) => {
@@ -37,60 +37,53 @@ export default function Nav({ lang, dict }: { lang: Locale; dict: Dictionary }) 
   const switchHref = "/" + segments.join("/");
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled ? "py-3" : "py-5"
-      }`}
-    >
-      <div className="mx-auto max-w-6xl px-5">
-        <nav
-          aria-label={dict.meta.siteName}
-          className={`flex items-center justify-between rounded-2xl px-4 transition-all duration-500 ${
-            scrolled
-              ? "glass border border-line py-2.5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.9)]"
-              : "border border-transparent py-2"
-          }`}
-        >
-          <Link href={href(lang, "home")} className="group flex items-center gap-2.5">
-            <span className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-violet-500 via-fuchsia-500 to-cyan-400">
-              <span className="absolute inset-0 animate-spin-slow bg-[conic-gradient(from_0deg,transparent,rgba(255,255,255,0.7),transparent)] opacity-70" />
-              <span className="relative font-display text-sm font-extrabold text-white">
-                p
-              </span>
-            </span>
-            <span className="font-display text-lg font-bold tracking-tight">
-              paggini
-            </span>
+    <header className="fixed inset-x-0 top-0 z-50">
+      <div
+        className={`transition-colors duration-500 ${
+          scrolled ? "bg-paper/90 backdrop-blur-md" : "bg-transparent"
+        }`}
+        style={{
+          borderBottom: scrolled ? "1px solid var(--line-2)" : "1px solid transparent",
+        }}
+      >
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-4 sm:px-8">
+          <Link href={href(lang, "home")} className="group flex items-baseline gap-2" data-cursor>
+            <span className="display text-2xl font-extrabold tracking-tight">paggini</span>
+            <span className="h-2 w-2 translate-y-[-2px] bg-flame transition-transform duration-300 group-hover:scale-150" />
           </Link>
 
-          <div className="hidden items-center gap-1 lg:flex">
+          <nav aria-label={dict.meta.siteName} className="hidden items-center gap-7 lg:flex">
             {links.map((l) => (
               <Link
                 key={l.key}
                 href={href(lang, l.key)}
                 aria-current={isActive(l.key) ? "page" : undefined}
-                className={`rounded-full px-4 py-2 text-sm transition-colors ${
-                  isActive(l.key)
-                    ? "text-chalk"
-                    : "text-mist hover:text-chalk"
-                }`}
+                className="group flex items-center gap-1.5 text-sm font-medium text-ink"
               >
-                {l.label}
+                <span className="label text-[0.6rem] text-flame">{l.n}</span>
+                <span
+                  className={`underline-flame pb-0.5 ${
+                    isActive(l.key) ? "bg-[length:100%_2px]" : ""
+                  }`}
+                >
+                  {l.label}
+                </span>
               </Link>
             ))}
-          </div>
+          </nav>
 
-          <div className="hidden items-center gap-2 lg:flex">
+          <div className="hidden items-center gap-4 lg:flex">
             <Link
               href={switchHref}
               hrefLang={otherLang}
               aria-label={dict.nav.switchLanguage}
-              className="rounded-full border border-line px-3 py-2 text-xs font-semibold uppercase tracking-wider text-mist transition-colors hover:border-line-strong hover:text-chalk"
+              data-cursor
+              className="mono border border-ink px-2.5 py-1.5 text-xs uppercase transition-colors hover:bg-ink hover:text-paper"
             >
               {otherLang}
             </Link>
-            <Link href={href(lang, "contact")} className="btn btn-primary h-10 px-5 text-sm">
-              {dict.nav.cta} →
+            <Link href={href(lang, "contact")} className="btn btn-ink h-11 px-6 text-sm">
+              {dict.nav.cta}
             </Link>
           </div>
 
@@ -98,66 +91,54 @@ export default function Nav({ lang, dict }: { lang: Locale; dict: Dictionary }) 
             aria-label={dict.nav.menu}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-line text-chalk lg:hidden"
+            className="flex h-11 w-11 items-center justify-center border border-ink lg:hidden"
+            data-cursor
           >
             <div className="flex flex-col gap-1.5">
-              <span
-                className={`h-0.5 w-5 bg-current transition-transform ${
-                  open ? "translate-y-2 rotate-45" : ""
-                }`}
-              />
-              <span
-                className={`h-0.5 w-5 bg-current transition-opacity ${
-                  open ? "opacity-0" : ""
-                }`}
-              />
-              <span
-                className={`h-0.5 w-5 bg-current transition-transform ${
-                  open ? "-translate-y-2 -rotate-45" : ""
-                }`}
-              />
+              <span className={`h-0.5 w-5 bg-ink transition-transform ${open ? "translate-y-2 rotate-45" : ""}`} />
+              <span className={`h-0.5 w-5 bg-ink transition-opacity ${open ? "opacity-0" : ""}`} />
+              <span className={`h-0.5 w-5 bg-ink transition-transform ${open ? "-translate-y-2 -rotate-45" : ""}`} />
             </div>
           </button>
-        </nav>
+        </div>
+      </div>
 
-        {/* Mobile drawer */}
-        <div
-          className={`mt-2 overflow-hidden rounded-2xl transition-all duration-500 lg:hidden ${
-            open ? "max-h-[32rem] opacity-100" : "max-h-0 opacity-0"
-          }`}
-        >
-          <div className="glass flex flex-col gap-1 border border-line p-3">
-            {links.map((l) => (
-              <Link
-                key={l.key}
-                href={href(lang, l.key)}
-                onClick={() => setOpen(false)}
-                aria-current={isActive(l.key) ? "page" : undefined}
-                className={`rounded-xl px-4 py-3 text-sm transition-colors hover:bg-white/5 ${
-                  isActive(l.key) ? "bg-white/5 text-chalk" : "text-mist hover:text-chalk"
-                }`}
-              >
-                {l.label}
-              </Link>
-            ))}
-            <div className="mt-1 flex items-center gap-2">
-              <Link
-                href={switchHref}
-                hrefLang={otherLang}
-                onClick={() => setOpen(false)}
-                aria-label={dict.nav.switchLanguage}
-                className="btn btn-ghost flex-1"
-              >
-                {otherLang.toUpperCase()}
-              </Link>
-              <Link
-                href={href(lang, "contact")}
-                onClick={() => setOpen(false)}
-                className="btn btn-primary flex-1"
-              >
-                {dict.nav.cta} →
-              </Link>
-            </div>
+      {/* Mobile drawer */}
+      <div
+        className={`overflow-hidden bg-paper transition-all duration-500 lg:hidden ${
+          open ? "max-h-[36rem] border-b border-ink" : "max-h-0"
+        }`}
+      >
+        <div className="flex flex-col px-5">
+          {links.map((l) => (
+            <Link
+              key={l.key}
+              href={href(lang, l.key)}
+              onClick={() => setOpen(false)}
+              aria-current={isActive(l.key) ? "page" : undefined}
+              className="flex items-center gap-3 border-t border-line py-4 text-lg"
+            >
+              <span className="label text-flame">{l.n}</span>
+              {l.label}
+            </Link>
+          ))}
+          <div className="flex items-center gap-3 py-4">
+            <Link
+              href={switchHref}
+              hrefLang={otherLang}
+              onClick={() => setOpen(false)}
+              aria-label={dict.nav.switchLanguage}
+              className="btn btn-line flex-1"
+            >
+              {otherLang.toUpperCase()}
+            </Link>
+            <Link
+              href={href(lang, "contact")}
+              onClick={() => setOpen(false)}
+              className="btn btn-ink flex-1"
+            >
+              {dict.nav.cta}
+            </Link>
           </div>
         </div>
       </div>

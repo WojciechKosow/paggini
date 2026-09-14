@@ -5,7 +5,6 @@ import { getDictionary } from "../dictionaries";
 import { pageMetadata } from "../../seo";
 import PageHeader from "../../components/PageHeader";
 import Reveal from "../../components/Reveal";
-import { Icon } from "../../components/Icons";
 import Process from "../../components/Process";
 import CTA from "../../components/CTA";
 
@@ -32,40 +31,31 @@ export default async function AboutPage(props: PageProps<"/[lang]/about">) {
 
   return (
     <>
-      <PageHeader
-        eyebrow={a.eyebrow}
-        title={a.title}
-        titleAccent={a.titleAccent}
-        lead={a.lead}
-      />
+      <PageHeader eyebrow={a.eyebrow} title={a.title} titleAccent={a.titleAccent} lead={a.lead} />
 
       {/* Story */}
-      <section className="mx-auto max-w-6xl px-5 py-16">
+      <section className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8">
         <div className="grid gap-6 md:grid-cols-2 md:gap-12">
           {a.body.map((paragraph, i) => (
             <Reveal key={i} delay={i * 100}>
-              <p className="text-lg leading-relaxed text-mist">{paragraph}</p>
+              <p className="text-xl leading-relaxed text-ink-soft">{paragraph}</p>
             </Reveal>
           ))}
         </div>
       </section>
 
       {/* Values */}
-      <section className="mx-auto max-w-6xl px-5 pb-20">
-        <Reveal>
-          <h2 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
-            {a.valuesTitle}
-          </h2>
+      <section className="mx-auto max-w-[1400px] px-5 pb-20 sm:px-8">
+        <Reveal className="border-b border-line-2 pb-8">
+          <h2 className="display text-3xl sm:text-5xl">{a.valuesTitle}</h2>
         </Reveal>
-        <div className="mt-8 grid gap-5 sm:grid-cols-3">
+        <div className="mt-8 grid gap-px border border-line-2 bg-line-2 sm:grid-cols-3">
           {a.values.map((v, i) => (
             <Reveal key={v.title} delay={i * 90}>
-              <div className="card h-full p-6">
-                <span className="icon-tile text-gradient">
-                  <Icon name="star" className="h-5 w-5" />
-                </span>
-                <h3 className="font-display mt-4 text-lg font-semibold">{v.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-mist">{v.desc}</p>
+              <div className="flex h-full flex-col bg-card p-7">
+                <span className="display text-5xl text-flame">{String(i + 1).padStart(2, "0")}</span>
+                <h3 className="display mt-6 text-xl">{v.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-soft">{v.desc}</p>
               </div>
             </Reveal>
           ))}
@@ -73,36 +63,26 @@ export default async function AboutPage(props: PageProps<"/[lang]/about">) {
       </section>
 
       {/* Team */}
-      <section className="border-t border-line py-20">
-        <div className="mx-auto max-w-6xl px-5">
-          <Reveal>
-            <h2 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
-              {a.teamTitle}
-            </h2>
+      <section className="bg-ink py-20 text-paper sm:py-28">
+        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+          <Reveal className="border-b border-paper/15 pb-8">
+            <h2 className="display text-3xl sm:text-5xl">{a.teamTitle}</h2>
           </Reveal>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2">
+          <div className="mt-8 grid gap-px border border-paper/15 bg-paper/15 sm:grid-cols-2">
             {a.team.map((member, i) => (
               <Reveal key={i} delay={i * 100}>
-                <div className="card flex items-center gap-5 p-6">
+                <div className="flex h-full items-center gap-5 bg-ink p-7">
                   <span
-                    className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl font-display text-2xl font-bold text-white"
-                    style={{
-                      background:
-                        i === 0
-                          ? "linear-gradient(135deg,#8b5cf6,#d946ef)"
-                          : "linear-gradient(135deg,#0ea5e9,#22d3ee)",
-                    }}
+                    className={`display flex h-16 w-16 shrink-0 items-center justify-center text-3xl ${
+                      i === 0 ? "bg-flame text-paper" : "border border-paper/30 text-paper"
+                    }`}
                   >
                     {member.name.trim().charAt(0) || "p"}
                   </span>
                   <div>
-                    <div className="font-display text-lg font-semibold">
-                      {member.name}
-                    </div>
-                    <div className="text-sm text-gradient">{member.role}</div>
-                    <p className="mt-2 text-sm leading-relaxed text-mist">
-                      {member.bio}
-                    </p>
+                    <div className="display text-xl">{member.name}</div>
+                    <div className="mono text-xs uppercase tracking-wider text-flame">{member.role}</div>
+                    <p className="mt-2 text-sm leading-relaxed text-paper/60">{member.bio}</p>
                   </div>
                 </div>
               </Reveal>

@@ -10,26 +10,21 @@ export default function Process({
 }) {
   const p = dict.process;
   return (
-    <section className={`relative py-28 ${bordered ? "border-y border-line" : ""}`}>
-      <div className="mx-auto max-w-6xl px-5">
-        <Reveal className="max-w-2xl">
-          <div className="eyebrow">{p.eyebrow}</div>
-          <h2 className="font-display mt-4 text-3xl font-bold tracking-tight sm:text-5xl">
-            {p.title}
-          </h2>
-          <p className="mt-4 text-lg text-mist">{p.lead}</p>
+    <section className={`relative py-24 sm:py-32 ${bordered ? "bg-paper-2" : ""}`}>
+      <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+        <Reveal className="border-b border-line-2 pb-8">
+          <div className="label">[ {p.eyebrow} ]</div>
+          <h2 className="display mt-4 max-w-2xl text-4xl sm:text-6xl">{p.title}</h2>
+          <p className="mt-4 max-w-md text-ink-soft">{p.lead}</p>
         </Reveal>
 
-        <div className="relative mt-16 grid gap-10 md:grid-cols-4">
-          <div className="pointer-events-none absolute left-0 right-0 top-6 hidden h-px bg-gradient-to-r from-transparent via-line-strong to-transparent md:block" />
+        <div className="mt-4">
           {p.steps.map((s, i) => (
-            <Reveal key={s.n} delay={i * 120}>
-              <div className="relative">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-line bg-ink-2 font-display text-lg font-bold text-gradient">
-                  {s.n}
-                </div>
-                <h3 className="font-display mt-5 text-xl font-semibold">{s.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-mist">{s.desc}</p>
+            <Reveal key={s.n} delay={i * 90}>
+              <div className="group grid grid-cols-[auto_1fr] items-baseline gap-6 border-b border-line py-8 transition-colors hover:bg-card sm:grid-cols-[120px_1fr_2fr] sm:gap-10 sm:px-4">
+                <span className="display text-4xl text-flame sm:text-6xl">{s.n}</span>
+                <h3 className="display text-2xl sm:text-4xl">{s.title}</h3>
+                <p className="col-span-2 max-w-md text-ink-soft sm:col-span-1">{s.desc}</p>
               </div>
             </Reveal>
           ))}

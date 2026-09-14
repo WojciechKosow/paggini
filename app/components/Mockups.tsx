@@ -1,213 +1,159 @@
-/* Animated, CSS-driven product mockups. Purely presentational, language-neutral
-   (no real copy) so they read well on both the PL and EN site. No client JS. */
+/* Cinematic, CSS-driven product mockups in the editorial (paper/ink/flame)
+   style. Purely presentational and language-neutral — mostly shapes and a few
+   universal glyphs — so they read on both the PL and EN site. No client JS. */
 
-function Chrome({ label }: { label: string }) {
+import type { ServiceKind } from "../content/site";
+
+const EASE = "cubic-bezier(0.65,0,0.35,1)";
+const loop = (name: string, dur = 12, ease = EASE) => `${name} ${dur}s ${ease} infinite`;
+
+function Chrome({ url }: { url: string }) {
   return (
-    <div className="flex items-center gap-2 border-b border-line bg-white/[0.02] px-4 py-3">
-      <span className="h-3 w-3 rounded-full bg-red-400/80" />
-      <span className="h-3 w-3 rounded-full bg-amber-400/80" />
-      <span className="h-3 w-3 rounded-full bg-emerald-400/80" />
-      <div className="ml-3 flex h-6 flex-1 items-center gap-2 rounded-md border border-line bg-black/40 px-3">
-        <span className="h-2.5 w-2.5 rounded-full border border-mist/50" />
-        <span className="text-[11px] text-mist">{label}</span>
+    <div className="flex items-center gap-2 border-b border-ink/15 bg-paper-2 px-4 py-3">
+      <span className="h-2.5 w-2.5 rounded-full bg-flame" />
+      <span className="h-2.5 w-2.5 rounded-full border border-ink/40" />
+      <span className="h-2.5 w-2.5 rounded-full border border-ink/40" />
+      <div className="mono ml-3 flex h-6 flex-1 items-center gap-2 rounded-sm border border-ink/15 bg-paper px-3 text-[10px] text-muted">
+        <span className="inline-block" style={{ animation: loop("reload-tick", 12, "ease-out") }}>
+          ↻
+        </span>
+        {url}
       </div>
+      <span className="mono flex items-center gap-1 text-[9px] text-flame">
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-flame" />
+        LIVE
+      </span>
     </div>
   );
 }
 
-/* ---------------- Website ---------------- */
+/* ---------------- Website: a live site that scrolls itself ---------------- */
 export function BrowserMockup() {
   return (
-    <div className="card ring-grad spotlight animate-float overflow-hidden shadow-[0_40px_120px_-40px_rgba(139,92,246,0.5)]">
-      <Chrome label="paggini.studio" />
-      <div className="relative p-5">
-        <div
-          className="relative overflow-hidden rounded-xl p-5"
-          style={{
-            backgroundImage:
-              "linear-gradient(110deg, rgba(139,92,246,0.9), rgba(217,70,239,0.7), rgba(34,211,238,0.75))",
-            backgroundSize: "200% 200%",
-            animation: "shift 6s ease-in-out infinite",
-          }}
-        >
-          <div className="h-2.5 w-24 rounded-full bg-white/85" />
-          <div className="mt-2 h-2.5 w-40 rounded-full bg-white/60" />
-          <div className="mt-4 flex gap-2">
-            <div className="h-6 w-20 rounded-md bg-white/90" />
-            <div className="h-6 w-16 rounded-md border border-white/60" />
-          </div>
-        </div>
-
-        <div className="mt-4 grid grid-cols-3 gap-3">
-          {[0, 1, 2].map((i) => (
-            <div
-              key={i}
-              className="rounded-lg border border-line bg-white/[0.03] p-3"
-              style={{ animation: `pop-in 0.6s ${0.2 + i * 0.15}s both` }}
-            >
-              <div className="h-6 w-6 rounded-md bg-gradient-to-br from-violet-500 to-cyan-400" />
-              <div className="mt-2 h-1.5 w-full rounded-full bg-white/15" />
-              <div className="mt-1.5 h-1.5 w-2/3 rounded-full bg-white/10" />
+    <div className="panel relative overflow-hidden shadow-[10px_10px_0_0_var(--ink)]">
+      <Chrome url="paggini.studio" />
+      <div className="relative h-[300px] overflow-hidden bg-paper">
+        <div className="w-full" style={{ height: "900px", animation: loop("site-scroll") }}>
+          {/* section 1 — hero */}
+          <div className="flex h-[300px] flex-col justify-center gap-3 border-b border-ink/10 px-7">
+            <div className="mono text-[10px] text-muted">PAGGINI — STUDIO</div>
+            <div className="flex flex-col gap-2">
+              <span className="h-5 w-40 bg-ink" />
+              <span className="h-5 w-28 bg-flame" />
             </div>
-          ))}
-        </div>
-
-        <div className="mt-4 flex h-16 items-end gap-1.5 rounded-lg border border-line bg-white/[0.02] p-3">
-          {[0.5, 0.75, 0.4, 0.9, 0.6, 1, 0.7, 0.85].map((h, i) => (
-            <span
-              key={i}
-              className="flex-1 origin-bottom rounded-sm bg-gradient-to-t from-violet-500/40 to-cyan-400"
-              style={{
-                height: `${h * 100}%`,
-                animation: `bar-pulse ${2 + i * 0.2}s ease-in-out ${i * 0.1}s infinite`,
-              }}
-            />
-          ))}
-        </div>
-
-        <div
-          className="pointer-events-none absolute left-8 top-24 z-10"
-          style={{ animation: "cursor-move 5s ease-in-out infinite" }}
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M4 2l6 16 2.5-6.5L19 9 4 2z" fill="#fff" stroke="#000" strokeWidth="1" />
-          </svg>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ---------------- Online store ---------------- */
-export function ShopMockup() {
-  const products = [
-    "linear-gradient(150deg,#8b5cf6,#6366f1)",
-    "linear-gradient(150deg,#22d3ee,#0ea5e9)",
-    "linear-gradient(150deg,#f472b6,#d946ef)",
-    "linear-gradient(150deg,#34d399,#10b981)",
-  ];
-  return (
-    <div className="card ring-grad spotlight animate-float overflow-hidden shadow-[0_40px_120px_-40px_rgba(217,70,239,0.45)]">
-      <Chrome label="shop" />
-      <div className="p-5">
-        {/* store header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="h-6 w-6 rounded-md bg-gradient-to-br from-fuchsia-500 to-violet-500" />
-            <div className="h-2 w-16 rounded-full bg-white/25" />
+            <div className="mt-2 flex gap-2">
+              <span className="h-7 w-24 bg-ink" />
+              <span className="h-7 w-16 border border-ink" />
+            </div>
           </div>
-          <div className="relative flex h-8 w-8 items-center justify-center rounded-lg border border-line bg-white/[0.03]">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="text-chalk">
-              <path d="M6 6h15l-1.5 9h-12z" />
-              <path d="M6 6L5 3H2" />
-              <circle cx="9" cy="20" r="1.4" />
-              <circle cx="18" cy="20" r="1.4" />
-            </svg>
-            <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-cyan-400 text-[9px] font-bold text-white">
-              3
+          {/* section 2 — work grid */}
+          <div className="grid h-[300px] grid-cols-2 grid-rows-2 gap-2 border-b border-ink/10 p-5">
+            {[
+              { bg: "bg-ink", t: "text-paper", l: "Tyrbud" },
+              { bg: "bg-flame", t: "text-paper", l: "FBT Outlet" },
+              { bg: "bg-paper-2 border border-ink/20", t: "text-ink", l: "Antlerwood" },
+              { bg: "bg-ink", t: "text-paper", l: "paggini" },
+            ].map((c) => (
+              <div key={c.l} className={`flex items-end p-3 ${c.bg} ${c.t}`}>
+                <span className="mono text-[10px]">{c.l}</span>
+              </div>
+            ))}
+          </div>
+          {/* section 3 — cta */}
+          <div className="flex h-[300px] flex-col items-center justify-center gap-4 px-7 text-center">
+            <div className="flex flex-col items-center gap-2">
+              <span className="h-4 w-44 bg-ink" />
+              <span className="h-4 w-24 bg-flame" />
+            </div>
+            <span className="flex h-9 items-center bg-flame px-5 text-sm font-semibold text-paper">
+              →
             </span>
           </div>
         </div>
 
-        {/* product grid */}
-        <div className="mt-4 grid grid-cols-2 gap-3">
-          {products.map((g, i) => (
-            <div
-              key={i}
-              className="overflow-hidden rounded-xl border border-line bg-white/[0.02]"
-              style={{ animation: `pop-in 0.6s ${0.15 + i * 0.12}s both` }}
-            >
-              <div className="h-16 w-full" style={{ background: g }} />
-              <div className="flex items-center justify-between p-2.5">
-                <div className="space-y-1.5">
-                  <div className="h-1.5 w-12 rounded-full bg-white/25" />
-                  <div className="h-1.5 w-8 rounded-full bg-white/15" />
-                </div>
-                <span className="rounded-md bg-white/90 px-1.5 py-0.5 text-[9px] font-bold text-ink">
-                  ★
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <button className="relative mt-4 flex h-9 w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-violet-500 to-fuchsia-500 text-xs font-semibold text-white">
-          <span
-            className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent"
-            style={{ animation: "shimmer 2.4s ease-in-out infinite" }}
-          />
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mr-1.5">
-            <path d="M6 6h15l-1.5 9h-12z" />
-            <path d="M6 6L5 3H2" />
+        {/* floating cursor */}
+        <div className="pointer-events-none absolute left-0 top-0 z-10" style={{ animation: loop("browser-cursor") }}>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M4 2l6 16 2.5-6.5L19 9 4 2z" fill="#17150f" stroke="#efe9dd" strokeWidth="1.2" />
           </svg>
-          +
-        </button>
+        </div>
       </div>
     </div>
   );
 }
 
-/* ---------------- Mobile app ---------------- */
-export function PhoneMockup() {
+/* ---------------- Online store: storefront that scrolls to checkout -------- */
+export function ShopMockup() {
   return (
-    <div className="relative mx-auto w-[230px]">
-      <div
-        className="animate-float relative rounded-[2.6rem] border border-line bg-ink-2 p-2.5 shadow-[0_40px_120px_-30px_rgba(99,102,241,0.5)]"
-        style={{ animationDelay: "0.4s" }}
-      >
-        <div className="ring-grad relative overflow-hidden rounded-[2rem] bg-black">
-          <div className="absolute left-1/2 top-2 z-20 h-5 w-24 -translate-x-1/2 rounded-full bg-black" />
-          <div
-            className="absolute inset-0 opacity-70"
-            style={{
-              backgroundImage:
-                "radial-gradient(120% 60% at 50% 0%, rgba(139,92,246,0.5), transparent 55%), radial-gradient(100% 60% at 50% 100%, rgba(34,211,238,0.4), transparent 60%)",
-            }}
-          />
+    <div className="panel relative overflow-hidden shadow-[10px_10px_0_0_var(--ink)]">
+      <Chrome url="shop" />
+      {/* sticky store header over the scrolling body */}
+      <div className="absolute inset-x-0 top-[45px] z-20 flex items-center justify-between border-b border-ink/15 bg-paper-2/95 px-5 py-2.5 backdrop-blur">
+        <span className="display text-sm">store</span>
+        <span className="relative flex h-6 w-6 items-center justify-center border border-ink">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+            <path d="M6 6h15l-1.5 9h-12z" />
+            <path d="M6 6L5 3H2" />
+          </svg>
+          <span className="mono absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center bg-flame text-[8px] font-bold text-paper">
+            3
+          </span>
+        </span>
+      </div>
 
-          <div className="relative flex h-[460px] flex-col px-5 pb-7 pt-9">
-            <div className="flex items-center justify-between text-[10px] text-white/70">
-              <span>9:41</span>
-              <span>●●● ᯤ ▮</span>
-            </div>
-
-            {/* balance card */}
-            <div className="mt-6 rounded-2xl bg-white/[0.08] p-4 backdrop-blur">
-              <div className="h-1.5 w-16 rounded-full bg-white/40" />
-              <div className="mt-3 h-4 w-28 rounded-full bg-white/80" />
-              <div className="mt-4 flex gap-2">
-                <span className="h-7 flex-1 rounded-lg bg-white/90" />
-                <span className="h-7 flex-1 rounded-lg border border-white/40" />
+      <div className="relative h-[300px] overflow-hidden bg-paper pt-[42px]">
+        <div className="w-full" style={{ height: "774px", animation: loop("site-scroll") }}>
+          {/* section 1 — product grid */}
+          <div className="grid h-[258px] grid-cols-2 gap-2 p-4">
+            {[
+              { bg: "bg-ink", p: "€49" },
+              { bg: "bg-flame", p: "€79" },
+              { bg: "bg-paper-2 border border-ink/20", p: "€39" },
+              { bg: "bg-ink", p: "€120" },
+            ].map((c, i) => (
+              <div key={i} className="flex flex-col border border-ink/15 bg-card">
+                <div className={`h-[70px] ${c.bg}`} />
+                <div className="flex items-center justify-between px-2.5 py-2">
+                  <span className="mono text-[10px]">{c.p}</span>
+                  <span className="mono text-[9px] text-flame">★★★★</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* section 2 — product detail + add to cart */}
+          <div className="flex h-[258px] gap-4 border-t border-ink/10 p-5">
+            <div className="h-full w-1/2 bg-ink" />
+            <div className="flex w-1/2 flex-col justify-center gap-3">
+              <span className="h-3 w-20 bg-ink" />
+              <span className="h-2 w-14 bg-ink/40" />
+              <span className="display text-2xl">€79</span>
+              <div
+                className="flex h-9 items-center justify-center gap-2 bg-flame text-xs font-semibold text-paper"
+                style={{ animation: loop("btn-press") }}
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M6 6h15l-1.5 9h-12z" />
+                  <path d="M6 6L5 3H2" />
+                </svg>
+                +
               </div>
             </div>
-
-            {/* list */}
-            <div className="mt-4 space-y-2.5">
-              {[0, 1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-3 rounded-xl bg-white/[0.05] p-2.5 backdrop-blur"
-                  style={{ animation: `pop-in 0.5s ${0.2 + i * 0.12}s both` }}
-                >
-                  <span className="h-8 w-8 rounded-lg bg-gradient-to-br from-violet-500 to-cyan-400" />
-                  <div className="flex-1 space-y-1.5">
-                    <div className="h-1.5 w-20 rounded-full bg-white/40" />
-                    <div className="h-1.5 w-12 rounded-full bg-white/20" />
-                  </div>
-                  <div className="h-1.5 w-8 rounded-full bg-white/30" />
-                </div>
-              ))}
+          </div>
+          {/* section 3 — checkout */}
+          <div className="flex h-[258px] flex-col justify-center gap-3 border-t border-ink/10 px-6">
+            <div className="mono text-[10px] text-muted">CHECKOUT</div>
+            {[0, 1].map((i) => (
+              <div key={i} className="flex items-center justify-between border border-ink/15 bg-card px-3 py-2">
+                <span className="h-2 w-16 bg-ink/50" />
+                <span className="mono text-[10px]">{i === 0 ? "€79" : "€8"}</span>
+              </div>
+            ))}
+            <div className="flex items-center justify-between px-3">
+              <span className="mono text-[10px] text-muted">TOTAL</span>
+              <span className="display text-xl">€87</span>
             </div>
-
-            {/* tab bar */}
-            <div className="mt-auto flex items-center justify-around rounded-2xl bg-white/[0.06] p-3 backdrop-blur">
-              {[1, 0.4, 0.4, 0.4].map((o, i) => (
-                <span
-                  key={i}
-                  className="h-5 w-5 rounded-lg bg-white"
-                  style={{ opacity: o }}
-                />
-              ))}
+            <div className="flex h-9 items-center justify-center bg-ink text-xs font-semibold text-paper">
+              →
             </div>
           </div>
         </div>
@@ -216,7 +162,119 @@ export function PhoneMockup() {
   );
 }
 
-export function mockupFor(kind: "web" | "shop" | "app") {
+/* ---------------- Mobile app: unlock → biometrics → home ---------------- */
+export function PhoneMockup() {
+  return (
+    <div className="relative mx-auto w-[240px]">
+      <div className="relative rounded-[2.4rem] border-2 border-ink bg-ink p-2.5 shadow-[10px_10px_0_0_var(--ink)]">
+        <div className="relative overflow-hidden rounded-[1.8rem] bg-paper">
+          <div className="absolute left-1/2 top-2 z-30 h-5 w-24 -translate-x-1/2 rounded-full bg-ink" />
+          <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-5 pt-2.5 text-[9px] text-ink">
+            <span className="mono">9:41</span>
+            <span className="mono">5G ▮▮▮</span>
+          </div>
+
+          <div className="flex h-[440px] w-[300%]" style={{ animation: loop("phone-strip") }}>
+            {/* screen 1 — login */}
+            <div className="flex w-1/3 flex-col justify-center px-6">
+              <div className="flex h-12 w-12 items-center justify-center bg-ink">
+                <span className="h-3 w-3 bg-flame" />
+              </div>
+              <div className="mt-5 flex flex-col gap-2">
+                <span className="h-4 w-24 bg-ink" />
+                <span className="h-4 w-16 bg-ink" />
+              </div>
+              <div className="mt-5 space-y-2.5">
+                <div className="flex h-9 items-center border border-ink/25 px-3">
+                  <span className="h-2 w-20 bg-ink/40" />
+                </div>
+                <div className="flex h-9 items-center gap-1.5 border border-ink/25 px-3">
+                  {Array.from({ length: 7 }).map((_, i) => (
+                    <span key={i} className="h-1.5 w-1.5 rounded-full bg-ink" />
+                  ))}
+                </div>
+                <div className="flex h-9 items-center justify-center bg-flame text-xs font-semibold text-paper">
+                  →
+                </div>
+              </div>
+            </div>
+
+            {/* screen 2 — biometrics */}
+            <div className="flex w-1/3 flex-col items-center justify-center gap-6 bg-ink text-paper">
+              <div className="mono text-[9px] text-paper/60">SCAN…</div>
+              <div className="relative flex h-24 w-24 items-center justify-center">
+                <span className="absolute inset-0 rounded-full border border-flame" style={{ animation: loop("ring-pulse") }} />
+                <div className="relative h-20 w-20 overflow-hidden">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#efe9dd" strokeWidth="1.1" strokeLinecap="round" className="h-full w-full">
+                    <path d="M12 2a10 10 0 00-8 4" opacity="0.5" />
+                    <path d="M4 10a8 8 0 0116 0v3" />
+                    <path d="M7.5 11a4.5 4.5 0 019 0v2a9 9 0 001 4" />
+                    <path d="M12 11v5a11 11 0 001 5" />
+                    <path d="M9.5 17a13 13 0 001 5" opacity="0.6" />
+                  </svg>
+                  <span
+                    className="absolute inset-x-0 top-0 h-0.5 bg-flame shadow-[0_0_8px_2px_rgba(255,59,29,0.6)]"
+                    style={{ animation: loop("scan-sweep") }}
+                  />
+                </div>
+              </div>
+              <div className="mono text-[9px] text-paper/40">FACE · TOUCH</div>
+            </div>
+
+            {/* screen 3 — home */}
+            <div className="relative flex w-1/3 flex-col px-5 pt-10">
+              <div
+                className="absolute inset-x-4 top-9 z-10 flex items-center gap-2 border border-ink/15 bg-card px-3 py-2 shadow-[3px_3px_0_0_var(--ink)]"
+                style={{ animation: loop("notif-pop") }}
+              >
+                <span className="h-6 w-6 bg-flame" />
+                <div className="flex flex-col gap-1">
+                  <span className="h-1.5 w-16 bg-ink/60" />
+                  <span className="h-1.5 w-10 bg-ink/30" />
+                </div>
+              </div>
+
+              <div className="mt-2 flex items-center gap-2">
+                <span className="h-6 w-6 rounded-full bg-ink" />
+                <span className="h-2 w-16 bg-ink/40" />
+              </div>
+
+              <div className="mt-3 flex items-end justify-between bg-ink p-3 text-paper">
+                <div className="flex flex-col gap-1.5">
+                  <span className="mono text-[8px] text-paper/50">BALANCE</span>
+                  <div className="display text-2xl">€4 289</div>
+                </div>
+                <span className="mono text-[9px] text-flame">+12%</span>
+              </div>
+
+              <div className="mt-3 space-y-2">
+                {[0, 1, 2].map((i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between border border-ink/15 bg-card px-3 py-2"
+                    style={{ animation: loop("card-in") }}
+                  >
+                    <span className="h-2 w-20 bg-ink/40" />
+                    <span className="mono text-[9px] text-muted">→</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-auto -mx-5 flex items-center justify-around border-t border-ink/15 bg-paper-2 py-3">
+                <span className="h-3 w-3 bg-flame" />
+                <span className="h-3 w-3 border border-ink/40" />
+                <span className="h-3 w-3 border border-ink/40" />
+                <span className="h-3 w-3 border border-ink/40" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function mockupFor(kind: ServiceKind) {
   if (kind === "shop") return <ShopMockup />;
   if (kind === "app") return <PhoneMockup />;
   return <BrowserMockup />;

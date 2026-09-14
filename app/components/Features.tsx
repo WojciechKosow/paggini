@@ -5,29 +5,34 @@ import type { Dictionary } from "../content/dictionary";
 export default function Features({ dict }: { dict: Dictionary }) {
   const f = dict.features;
   return (
-    <section className="relative border-t border-line py-28 sm:py-32">
-      <div className="mx-auto max-w-6xl px-5">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <div className="eyebrow">{f.eyebrow}</div>
-          <h2 className="font-display mt-4 text-3xl font-bold tracking-tight sm:text-5xl">
-            {f.title} <span className="text-gradient">{f.titleAccent}</span>
-          </h2>
-          <p className="mt-4 text-lg text-mist">{f.lead}</p>
+    <section className="relative bg-ink py-24 text-paper sm:py-32">
+      <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+        <Reveal className="flex flex-col justify-between gap-6 border-b border-paper/15 pb-8 sm:flex-row sm:items-end">
+          <div>
+            <div className="label !text-paper/50">[ {f.eyebrow} ]</div>
+            <h2 className="display mt-4 max-w-xl text-4xl sm:text-6xl">
+              {f.title}
+              <br />
+              <span className="flame">{f.titleAccent}</span>
+            </h2>
+          </div>
+          <p className="max-w-xs text-paper/60">{f.lead}</p>
         </Reveal>
 
-        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-px border border-paper/15 bg-paper/15 sm:grid-cols-2 lg:grid-cols-3">
           {f.items.map((item, i) => (
-            <Reveal key={item.title} delay={(i % 3) * 90}>
-              <div className="card group h-full p-7 transition-transform duration-500 hover:-translate-y-1.5">
-                <span className="icon-tile text-gradient transition-transform duration-500 group-hover:scale-110">
-                  <Icon name={item.icon} className="h-6 w-6" />
-                </span>
-                <h3 className="font-display mt-5 text-lg font-semibold">
-                  {item.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-mist">
-                  {item.desc}
-                </p>
+            <Reveal key={item.title} delay={(i % 3) * 80}>
+              <div className="group flex h-full flex-col bg-ink p-7 transition-colors hover:bg-[#100e0a]">
+                <div className="flex items-center justify-between">
+                  <span className="flex h-11 w-11 items-center justify-center border border-paper/25 text-flame transition-transform duration-500 group-hover:scale-110">
+                    <Icon name={item.icon} className="h-5 w-5" />
+                  </span>
+                  <span className="mono text-xs text-paper/30">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </div>
+                <h3 className="display mt-6 text-xl">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-paper/60">{item.desc}</p>
               </div>
             </Reveal>
           ))}

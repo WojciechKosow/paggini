@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Geist, Sora } from "next/font/google";
+import { Geist, Bricolage_Grotesque, Space_Mono } from "next/font/google";
 import "./globals.css";
 
 // This file bypasses the app layout, so it imports its own global styles/fonts
@@ -11,10 +11,17 @@ const geistSans = Geist({
   display: "swap",
 });
 
-const sora = Sora({
-  variable: "--font-sora",
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
   subsets: ["latin", "latin-ext"],
   weight: ["600", "700", "800"],
+  display: "swap",
+});
+
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
+  subsets: ["latin"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -28,48 +35,35 @@ export default function GlobalNotFound() {
   return (
     <html
       lang="pl"
-      className={`${geistSans.variable} ${sora.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${bricolage.variable} ${spaceMono.variable} h-full antialiased`}
     >
       <body className="min-h-full">
-        <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-24 text-center">
-          <div className="pointer-events-none absolute inset-0 -z-10">
-            <div
-              className="animate-aurora absolute left-1/2 top-1/3 h-[32rem] w-[32rem] -translate-x-1/2 rounded-full opacity-40 blur-[130px]"
-              style={{
-                background:
-                  "radial-gradient(circle,rgba(139,92,246,0.5),transparent 60%)",
-              }}
-            />
-            <div className="bg-grid mask-fade absolute inset-0 opacity-25" />
-          </div>
+        <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-5 py-24 text-center">
+          <div className="grid-lines pointer-events-none absolute inset-0 opacity-50" />
 
-          <div className="mx-auto max-w-lg">
-            <Link href="/pl" className="inline-flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 via-fuchsia-500 to-cyan-400 font-display text-base font-extrabold text-white">
-                p
-              </span>
-              <span className="font-display text-lg font-bold">paggini</span>
+          <div className="relative mx-auto max-w-lg">
+            <Link href="/pl" className="inline-flex items-baseline gap-2">
+              <span className="display text-2xl font-extrabold">paggini</span>
+              <span className="h-2 w-2 bg-flame" />
             </Link>
 
-            <div className="font-display mt-10 text-7xl font-extrabold tracking-tight text-gradient">
-              404
-            </div>
-            <h1 className="font-display mt-6 text-3xl font-bold tracking-tight">
+            <div className="display mt-10 text-[7rem] leading-none text-flame sm:text-[9rem]">404</div>
+            <h1 className="display mt-4 text-3xl sm:text-4xl">
               Nie ma takiej strony
-              <span className="mt-1 block text-xl text-mist">Page not found</span>
-            </h1>
-            <p className="mt-4 text-lg text-mist">
-              Strona mogła zmienić adres albo nigdy nie istniała.
-              <span className="mt-1 block">
-                The page may have moved, or it never existed.
+              <span className="mono mt-2 block text-sm uppercase tracking-wider text-muted">
+                Page not found
               </span>
+            </h1>
+            <p className="mt-5 text-lg text-ink-soft">
+              Strona mogła zmienić adres albo nigdy nie istniała.
+              <span className="mt-1 block">The page may have moved, or it never existed.</span>
             </p>
 
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link href="/pl" className="btn btn-primary w-full sm:w-auto">
+              <Link href="/pl" className="btn btn-ink px-7">
                 Strona główna
               </Link>
-              <Link href="/en" className="btn btn-ghost w-full sm:w-auto">
+              <Link href="/en" className="btn btn-line px-7">
                 Home (EN)
               </Link>
             </div>

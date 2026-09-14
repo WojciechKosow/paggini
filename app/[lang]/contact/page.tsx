@@ -6,7 +6,6 @@ import { pageMetadata } from "../../seo";
 import PageHeader from "../../components/PageHeader";
 import ContactForm from "../../components/ContactForm";
 import Reveal from "../../components/Reveal";
-import { Icon } from "../../components/Icons";
 
 export async function generateMetadata(
   props: PageProps<"/[lang]/contact">
@@ -31,67 +30,41 @@ export default async function ContactPage(props: PageProps<"/[lang]/contact">) {
 
   return (
     <>
-      <PageHeader
-        eyebrow={c.eyebrow}
-        title={c.title}
-        titleAccent={c.titleAccent}
-        lead={c.lead}
-      />
+      <PageHeader eyebrow={c.eyebrow} title={c.title} titleAccent={c.titleAccent} lead={c.lead} />
 
-      <section className="mx-auto max-w-6xl px-5 pb-28">
+      <section className="mx-auto max-w-[1400px] px-5 pb-28 sm:px-8">
         <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
           {/* Details */}
-          <Reveal className="flex flex-col gap-4">
-            <a
-              href={`mailto:${contact.email}`}
-              className="card group flex items-center gap-4 p-5 transition-transform duration-500 hover:-translate-y-1"
-            >
-              <span className="icon-tile text-gradient">
-                <Icon name="sparkles" className="h-5 w-5" />
-              </span>
-              <div>
-                <div className="text-xs uppercase tracking-wider text-mist">
-                  {c.emailLabel}
-                </div>
-                <div className="font-display text-lg font-semibold">
-                  {contact.email}
-                </div>
-              </div>
+          <Reveal className="flex flex-col gap-6">
+            <a href={`mailto:${contact.email}`} data-cursor className="group block border-b border-line-2 pb-6">
+              <div className="mono text-[10px] uppercase tracking-wider text-muted">{c.emailLabel}</div>
+              <div className="display mt-2 text-2xl underline-flame sm:text-3xl">{contact.email}</div>
             </a>
 
-            <div className="card flex items-center gap-4 p-5">
-              <span className="icon-tile text-gradient">
-                <Icon name="compass" className="h-5 w-5" />
-              </span>
-              <div>
-                <div className="text-xs uppercase tracking-wider text-mist">
-                  {locale === "pl" ? "Gdzie jesteśmy" : "Where we are"}
-                </div>
-                <div className="font-display text-lg font-semibold">
-                  {contact.location[locale]}
-                </div>
+            <div className="border-b border-line-2 pb-6">
+              <div className="mono text-[10px] uppercase tracking-wider text-muted">
+                {locale === "pl" ? "Gdzie jesteśmy" : "Where we are"}
               </div>
+              <div className="display mt-2 text-2xl">{contact.location[locale]}</div>
             </div>
 
-            <div className="mt-2 flex flex-wrap gap-2">
+            <div className="flex flex-col gap-3">
               {c.badges.map((b) => (
-                <span
-                  key={b}
-                  className="rounded-full border border-line bg-white/[0.02] px-4 py-2 text-sm text-mist"
-                >
-                  ✦ {b}
+                <span key={b} className="mono flex items-center gap-3 text-xs text-ink-soft">
+                  <span className="h-1.5 w-1.5 bg-flame" /> {b}
                 </span>
               ))}
             </div>
 
-            <div className="mt-2 flex flex-wrap gap-2">
+            <div className="mt-2 flex flex-wrap gap-4">
               {contact.social.map((s) => (
                 <a
                   key={s.label}
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full border border-line px-4 py-2 text-sm text-mist transition-colors hover:border-line-strong hover:text-chalk"
+                  data-cursor
+                  className="mono text-xs uppercase tracking-wider text-ink underline-flame"
                 >
                   {s.label} ↗
                 </a>

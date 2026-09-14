@@ -35,6 +35,8 @@ const en: Dictionary = {
 
   hero: {
     badge: "Available — taking on new projects",
+    kicker: "Websites, stores & apps studio",
+    words: ["Websites.", "Stores.", "Apps."],
     titleLead: "Websites, stores",
     titleMid: "and apps that",
     titleAccent: "make a difference",
