@@ -1,87 +1,39 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import Link from "next/link";
 import Magnetic from "./Magnetic";
+import { href, contact, type Locale } from "../content/site";
+import type { Dictionary } from "../content/dictionary";
 
-const WORDS = ["Strony.", "Systemy.", "Aplikacje."];
-
-const STATS = [
-  { value: 120, suffix: "+", label: "projektów" },
-  { value: 8, suffix: "", label: "lat na rynku" },
-  { value: 98, suffix: "%", label: "klientów wraca" },
-  { value: 40, suffix: "+", label: "specjalistów" },
-];
-
-function useCountUp(target: number, run: boolean, duration = 1400) {
-  const [value, setValue] = useState(0);
-  useEffect(() => {
-    if (!run) return;
-    let raf = 0;
-    const start = performance.now();
-    const tick = (now: number) => {
-      const t = Math.min((now - start) / duration, 1);
-      setValue(Math.round(target * (1 - Math.pow(1 - t, 3))));
-      if (t < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [target, run, duration]);
-  return value;
-}
-
-function Stat({ value, suffix, label, run }: (typeof STATS)[number] & { run: boolean }) {
-  const n = useCountUp(value, run);
-  return (
-    <div className="flex flex-col gap-1">
-      <div className="display text-4xl font-extrabold sm:text-5xl">
-        {n}
-        <span className="flame">{suffix}</span>
-      </div>
-      <div className="label">{label}</div>
-    </div>
-  );
-}
-
-export default function Hero() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 60);
-    return () => clearTimeout(t);
-  }, []);
+export default function Hero({ lang, dict }: { lang: Locale; dict: Dictionary }) {
+  const h = dict.hero;
 
   return (
-    <section id="top" className="relative overflow-hidden">
+    <section className="relative overflow-hidden">
       <div className="grid-lines pointer-events-none absolute inset-0 opacity-60" />
 
       <div className="relative mx-auto max-w-[1400px] px-5 pb-14 pt-32 sm:px-8 sm:pt-40">
         {/* meta bar */}
-        <div
-          className={`flex flex-wrap items-center justify-between gap-3 border-b border-line-2 pb-5 transition-opacity duration-700 ${
-            mounted ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <span className="label">Studio produktów cyfrowych</span>
-          <span className="label hidden sm:block">Warszawa — PL</span>
+        <div className="anim-fade-up flex flex-wrap items-center justify-between gap-3 border-b border-line-2 pb-5">
+          <span className="label">{h.kicker}</span>
+          <span className="label hidden sm:block">{contact.location[lang]}</span>
           <span className="label flex items-center gap-2">
             <span className="inline-block h-2 w-2 animate-pulse bg-flame" />
-            Dostępni — Q1 2026
+            {h.badge}
           </span>
         </div>
 
         {/* headline */}
-        <div className={`mt-10 grid gap-8 lg:grid-cols-12 lg:gap-10 ${mounted ? "is-visible" : ""}`}>
+        <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:gap-10">
           <h1 className="display col-span-12 lg:col-span-8">
-            {WORDS.map((w, i) => (
+            {h.words.map((w, i) => (
               <span key={w} className="rise-mask">
                 <span
-                  className="rise block"
+                  className="anim-rise block"
                   style={{
-                    ["--reveal-delay" as string]: `${i * 120}ms`,
-                    fontSize: "clamp(3.2rem, 12.5vw, 11rem)",
+                    animationDelay: `${i * 110}ms`,
+                    fontSize: "clamp(2.9rem, 11vw, 10.5rem)",
                   }}
                 >
-                  {w.slice(0, -1)}
+                  {w.replace(/\.$/, "")}
                   <span className="flame">.</span>
                 </span>
               </span>
@@ -90,38 +42,43 @@ export default function Hero() {
 
           <div className="col-span-12 flex flex-col justify-end lg:col-span-4">
             <p
-              className={`max-w-sm text-lg leading-relaxed text-ink-soft transition-all delay-500 duration-700 ${
-                mounted ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
-              }`}
+              className="anim-fade-up max-w-sm text-lg leading-relaxed text-ink-soft"
+              style={{ animationDelay: "400ms" }}
             >
-              Studio produktowe. Projektujemy i kodujemy dopracowane produkty
-              cyfrowe — od pierwszego szkicu po wdrożenie. Bez szablonów, bez
-              kompromisów w detalu.
+              {h.lead}
             </p>
 
             <div
-              className={`mt-8 flex flex-col gap-3 transition-all delay-[650ms] duration-700 sm:flex-row ${
-                mounted ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
-              }`}
+              className="anim-fade-up mt-8 flex flex-col gap-3 sm:flex-row"
+              style={{ animationDelay: "540ms" }}
             >
               <Magnetic>
-                <a href="#portfolio" className="btn btn-ink px-7">
-                  Zobacz prace
-                </a>
+                <Link href={href(lang, "work")} className="btn btn-ink px-7">
+                  {h.ctaPrimary}
+                </Link>
               </Magnetic>
               <Magnetic>
-                <a href="#kontakt" className="btn btn-line px-7">
-                  Umów rozmowę
-                </a>
+                <Link href={href(lang, "contact")} className="btn btn-line px-7">
+                  {h.ctaSecondary}
+                </Link>
               </Magnetic>
             </div>
           </div>
         </div>
 
         {/* stats */}
-        <div className="mt-16 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line-2 pt-10 md:grid-cols-4">
-          {STATS.map((s) => (
-            <Stat key={s.label} {...s} run={mounted} />
+        <div
+          className="anim-fade-up mt-16 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line-2 pt-10 md:grid-cols-4"
+          style={{ animationDelay: "640ms" }}
+        >
+          {h.stats.map((s) => (
+            <div key={s.label} className="flex flex-col gap-1">
+              <div className="display text-4xl font-extrabold sm:text-5xl">
+                {s.value}
+                {s.suffix && <span className="flame">{s.suffix}</span>}
+              </div>
+              <div className="label">{s.label}</div>
+            </div>
           ))}
         </div>
       </div>

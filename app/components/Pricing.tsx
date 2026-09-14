@@ -1,81 +1,42 @@
-"use client";
-
-import { useState } from "react";
+import Link from "next/link";
 import Reveal from "./Reveal";
+import { href, type Locale } from "../content/site";
+import type { Dictionary } from "../content/dictionary";
 
-type Plan = {
-  name: string;
-  tagline: string;
-  project: string;
-  retainer: string;
-  note: string;
-  features: string[];
-  featured?: boolean;
-  cta: string;
-};
-
-const PLANS: Plan[] = [
-  {
-    name: "Start",
-    tagline: "Landing page i strony firmowe",
-    project: "od 6 900 zł",
-    retainer: "od 690 zł/mc",
-    note: "Realizacja 2–3 tygodnie",
-    features: ["Projekt UI szyty na miarę", "Do 5 podstron", "Animacje i responsywność", "Podstawowe SEO", "Formularz kontaktowy"],
-    cta: "Wyceń stronę",
-  },
-  {
-    name: "Studio",
-    tagline: "Systemy webowe i aplikacje",
-    project: "od 24 900 zł",
-    retainer: "od 2 400 zł/mc",
-    note: "Najczęściej wybierany",
-    features: ["Wszystko z pakietu Start", "Logowanie, role i uprawnienia", "Panel administracyjny", "Integracje i API", "Aplikacja mobilna (opcja)", "Wsparcie i rozwój"],
-    featured: true,
-    cta: "Umów konsultację",
-  },
-  {
-    name: "Enterprise",
-    tagline: "Złożone produkty na miarę",
-    project: "wycena indyw.",
-    retainer: "SLA + zespół",
-    note: "Dla wymagających wdrożeń",
-    features: ["Dedykowany zespół produktowy", "Architektura pod skalę", "Bezpieczeństwo i audyty", "Umowa SLA i priorytet", "Warsztaty i strategia"],
-    cta: "Porozmawiajmy",
-  },
-];
-
-function PlanCard({ plan, retainer }: { plan: Plan; retainer: boolean }) {
+function PlanCard({
+  lang,
+  plan,
+  fromLabel,
+}: {
+  lang: Locale;
+  plan: Dictionary["pricing"]["plans"][number];
+  fromLabel: string;
+}) {
   const dark = plan.featured;
   return (
     <article
-      className={`relative flex flex-col p-7 transition-transform duration-500 hover:-translate-y-2 ${
+      className={`relative flex h-full flex-col p-7 transition-transform duration-500 hover:-translate-y-2 ${
         dark ? "bg-ink text-paper shadow-[10px_10px_0_0_var(--flame)]" : "panel"
       }`}
     >
-      {dark && (
-        <span className="mono absolute right-6 top-7 text-[10px] text-flame">★ POPULARNY</span>
-      )}
+      {dark && <span className="mono absolute right-6 top-7 text-[10px] text-flame">★</span>}
 
       <div className="display text-2xl">{plan.name}</div>
       <div className={`mt-1 text-sm ${dark ? "text-paper/60" : "text-muted"}`}>{plan.tagline}</div>
 
       <div className="mt-6 flex items-baseline gap-2">
-        <span className="display text-4xl">{retainer ? plan.retainer : plan.project}</span>
+        <span className={`mono text-xs ${dark ? "text-paper/50" : "text-muted"}`}>{fromLabel}</span>
+        <span className="display text-4xl">{plan.price}</span>
       </div>
       <div className={`mono mt-2 text-[10px] uppercase ${dark ? "text-paper/50" : "text-muted"}`}>
         {plan.note}
       </div>
 
-      <a
-        href="#kontakt"
-        data-cursor
-        className={`mt-7 ${dark ? "btn btn-paper" : "btn btn-ink"}`}
-      >
+      <Link href={href(lang, "contact")} data-cursor className={`mt-7 ${dark ? "btn btn-paper" : "btn btn-ink"}`}>
         {plan.cta}
-      </a>
+      </Link>
 
-      <ul className={`mt-7 divide-y ${dark ? "divide-paper/15" : "divide-line"} border-t ${dark ? "border-paper/15" : "border-line"}`}>
+      <ul className={`mt-7 border-t ${dark ? "divide-paper/15 border-paper/15" : "divide-line border-line"} divide-y`}>
         {plan.features.map((f) => (
           <li key={f} className="flex items-start gap-3 py-3 text-sm">
             <span className="mt-1.5 h-1.5 w-1.5 shrink-0 bg-flame" />
@@ -87,53 +48,31 @@ function PlanCard({ plan, retainer }: { plan: Plan; retainer: boolean }) {
   );
 }
 
-export default function Pricing() {
-  const [retainer, setRetainer] = useState(false);
-
+export default function Pricing({ lang, dict }: { lang: Locale; dict: Dictionary }) {
+  const p = dict.pricing;
   return (
-    <section id="cennik" className="relative bg-paper-2 py-24 sm:py-32">
+    <section className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-        <Reveal className="flex flex-col justify-between gap-6 border-b border-line-2 pb-8 sm:flex-row sm:items-end">
-          <div>
-            <div className="label">[ Cennik ]</div>
-            <h2 className="display mt-4 text-4xl sm:text-6xl">Przejrzyste pakiety</h2>
-            <p className="mt-4 max-w-md text-ink-soft">
-              Widełki na start — finalna wycena zależy od zakresu. Bez ukrytych kosztów.
-            </p>
-          </div>
-
-          <div className="mono inline-flex items-center border border-ink text-xs">
-            <button
-              onClick={() => setRetainer(false)}
-              data-cursor
-              className={`px-4 py-2.5 uppercase tracking-wider transition-colors ${!retainer ? "bg-ink text-paper" : "text-ink"}`}
-            >
-              Projekt
-            </button>
-            <button
-              onClick={() => setRetainer(true)}
-              data-cursor
-              className={`border-l border-ink px-4 py-2.5 uppercase tracking-wider transition-colors ${retainer ? "bg-ink text-paper" : "text-ink"}`}
-            >
-              Współpraca
-            </button>
-          </div>
+        <Reveal className="border-b border-line-2 pb-8">
+          <div className="label">[ {p.eyebrow} ]</div>
+          <h2 className="display mt-4 text-4xl sm:text-6xl">{p.title}</h2>
+          <p className="mt-4 max-w-md text-ink-soft">{p.lead}</p>
         </Reveal>
 
         <div className="mt-10 grid items-start gap-4 lg:grid-cols-3">
-          {PLANS.map((p, i) => (
-            <Reveal key={p.name} delay={i * 100}>
-              <PlanCard plan={p} retainer={retainer} />
+          {p.plans.map((plan, i) => (
+            <Reveal key={plan.name} delay={i * 100}>
+              <PlanCard lang={lang} plan={plan} fromLabel={p.fromLabel} />
             </Reveal>
           ))}
         </div>
 
         <Reveal className="mt-8 text-sm text-muted" delay={180}>
-          Nie wiesz, co wybrać?{" "}
-          <a href="#kontakt" className="underline-flame font-semibold text-ink" data-cursor>
-            Napisz do nas
-          </a>{" "}
-          — doradzimy w 24h.
+          {p.help.text}{" "}
+          <Link href={href(lang, "contact")} data-cursor className="underline-flame font-semibold text-ink">
+            {p.help.linkText}
+          </Link>{" "}
+          {p.help.after}
         </Reveal>
       </div>
     </section>
