@@ -28,7 +28,9 @@
   --color-ink-3: var(--ink-3);
   --color-chalk: var(--chalk);
   --color-mist: var(--mist);
+  --color-mist-dim: var(--mist-dim);
   --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
 
   --font-sans: var(--font-geist-sans);
   --font-display: var(--font-sora);
@@ -220,6 +222,63 @@ body {
   border-color: rgba(255, 255, 255, 0.28);
   background: rgba(255, 255, 255, 0.06);
   transform: translateY(-2px);
+}
+
+/* ------------------------------------------------------------
+   Accessibility — skip link
+   ------------------------------------------------------------ */
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 0.75rem;
+  z-index: 100;
+  transform: translateY(-160%);
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--ink-2);
+  padding: 0.55rem 1.1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--chalk);
+  transition: transform 0.2s ease;
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--violet);
+  outline-offset: 2px;
+}
+
+/* Visible focus ring for keyboard users across interactive elements */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--violet) 75%, white);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Small icon tiles used across feature / value cards */
+.icon-tile {
+  display: inline-flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.9rem;
+  border: 1px solid var(--line);
+  background: linear-gradient(
+    160deg,
+    color-mix(in oklab, var(--violet) 22%, transparent),
+    color-mix(in oklab, var(--cyan) 12%, transparent)
+  );
+  color: var(--chalk);
+}
+
+/* Page-header spacing helper (fixed nav offset) */
+.page-top {
+  padding-top: 9rem;
 }
 
 /* ------------------------------------------------------------

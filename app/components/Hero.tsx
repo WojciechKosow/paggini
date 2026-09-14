@@ -1,13 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-const STATS = [
-  { value: 120, suffix: "+", label: "wdrożonych projektów" },
-  { value: 8, suffix: " lat", label: "na rynku" },
-  { value: 98, suffix: "%", label: "klientów wraca" },
-  { value: 40, suffix: "+", label: "specjalistów w zespole" },
-];
+import Link from "next/link";
+import { href, type Locale } from "../content/site";
+import type { Dictionary } from "../content/dictionary";
 
 function useCountUp(target: number, run: boolean, duration = 1400) {
   const [value, setValue] = useState(0);
@@ -33,28 +29,28 @@ function Stat({
   label,
   run,
 }: {
-  value: number;
+  value: string;
   suffix: string;
   label: string;
   run: boolean;
 }) {
-  const n = useCountUp(value, run);
+  const numeric = /^\d+$/.test(value);
+  const n = useCountUp(numeric ? parseInt(value, 10) : 0, run && numeric);
   return (
     <div>
       <div className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
-        {n}
-        <span className="text-gradient">{suffix}</span>
+        {numeric ? n : value}
+        {suffix && <span className="text-gradient">{suffix}</span>}
       </div>
       <div className="mt-1 text-sm text-mist">{label}</div>
     </div>
   );
 }
 
-export default function Hero() {
+export default function Hero({ lang, dict }: { lang: Locale; dict: Dictionary }) {
   const ref = useRef<HTMLDivElement>(null);
   const [statsRun, setStatsRun] = useState(false);
 
-  // Subtle parallax on the aurora orbs
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -80,9 +76,10 @@ export default function Hero() {
     return () => clearTimeout(t);
   }, []);
 
+  const h = dict.hero;
+
   return (
-    <section id="top" ref={ref} className="relative overflow-hidden pt-40 pb-24">
-      {/* Aurora background */}
+    <section ref={ref} className="relative overflow-hidden pt-40 pb-24">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div
           className="animate-aurora absolute -top-40 left-1/2 h-[46rem] w-[46rem] -translate-x-1/2 rounded-full opacity-60 blur-[120px]"
@@ -119,43 +116,41 @@ export default function Hero() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
             </span>
-            Przyjmujemy projekty na Q1 2026
+            {h.badge}
           </div>
 
           <h1
             className="font-display mt-7 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl"
             style={{ animation: "pop-in 0.9s 0.05s both" }}
           >
-            <span className="text-gradient-soft">Strony, systemy</span>
-            <br />i aplikacje, które{" "}
-            <span className="accent-serif text-gradient">robią wrażenie</span>.
+            <span className="text-gradient-soft">{h.titleLead}</span>
+            <br />
+            {h.titleMid}{" "}
+            <span className="accent-serif text-gradient">{h.titleAccent}</span>.
           </h1>
 
           <p
             className="mt-6 max-w-xl text-lg leading-relaxed text-mist"
             style={{ animation: "pop-in 1s 0.15s both" }}
           >
-            Jesteśmy studiem produktowym. Projektujemy i budujemy dopracowane
-            produkty cyfrowe — od landing page&apos;y, przez systemy webowe, po
-            aplikacje mobilne. Nowocześnie, z dbałością o każdy detal.
+            {h.lead}
           </p>
 
           <div
             className="mt-9 flex flex-col items-center gap-3 sm:flex-row"
             style={{ animation: "pop-in 1.1s 0.25s both" }}
           >
-            <a href="#portfolio" className="btn btn-primary w-full sm:w-auto">
-              Zobacz portfolio
-            </a>
-            <a href="#kontakt" className="btn btn-ghost w-full sm:w-auto">
-              Umów bezpłatną rozmowę
-            </a>
+            <Link href={href(lang, "work")} className="btn btn-primary w-full sm:w-auto">
+              {h.ctaPrimary}
+            </Link>
+            <Link href={href(lang, "contact")} className="btn btn-ghost w-full sm:w-auto">
+              {h.ctaSecondary}
+            </Link>
           </div>
         </div>
 
-        {/* Stats */}
         <div className="mx-auto mt-20 grid max-w-4xl grid-cols-2 gap-8 border-t border-line pt-10 md:grid-cols-4">
-          {STATS.map((s) => (
+          {h.stats.map((s) => (
             <Stat key={s.label} {...s} run={statsRun} />
           ))}
         </div>

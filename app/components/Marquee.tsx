@@ -1,18 +1,7 @@
-const ITEMS = [
-  "Strategia",
-  "UX / UI Design",
-  "Next.js",
-  "React",
-  "Aplikacje mobilne",
-  "Systemy webowe",
-  "E-commerce",
-  "Motion design",
-  "Integracje API",
-  "Wsparcie 24/7",
-];
+import type { Dictionary } from "../content/dictionary";
 
-export default function Marquee() {
-  const row = [...ITEMS, ...ITEMS];
+export default function Marquee({ dict }: { dict: Dictionary }) {
+  const row = [...dict.marquee, ...dict.marquee];
   return (
     <section className="relative border-y border-line py-8">
       <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-ink to-transparent" />
