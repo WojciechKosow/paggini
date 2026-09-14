@@ -1,55 +1,53 @@
 import Reveal from "./Reveal";
+import Magnetic from "./Magnetic";
 
 export default function CTA() {
   return (
-    <section id="kontakt" className="relative py-28 sm:py-36">
-      <div className="mx-auto max-w-6xl px-5">
+    <section id="kontakt" className="bg-ink py-24 text-paper sm:py-32">
+      <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         <Reveal>
-          <div className="ring-grad relative overflow-hidden rounded-[2rem] px-6 py-20 text-center sm:px-16">
-            {/* glow */}
-            <div className="pointer-events-none absolute inset-0 -z-10">
-              <div
-                className="animate-aurora absolute left-1/2 top-0 h-96 w-96 -translate-x-1/2 rounded-full opacity-50 blur-[110px]"
-                style={{
-                  background:
-                    "radial-gradient(circle,rgba(139,92,246,0.6),transparent 60%)",
-                }}
-              />
-              <div
-                className="animate-aurora-2 absolute bottom-0 right-1/4 h-80 w-80 rounded-full opacity-40 blur-[110px]"
-                style={{
-                  background:
-                    "radial-gradient(circle,rgba(34,211,238,0.5),transparent 60%)",
-                }}
-              />
-              <div className="bg-grid mask-fade absolute inset-0 opacity-20" />
-            </div>
+          <div className="label !text-paper/50">[ Kontakt ]</div>
+          <h2 className="display mt-6 text-5xl leading-[0.95] sm:text-8xl">
+            Masz pomysł?
+            <br />
+            Zróbmy z niego <span className="serif-i flame">produkt</span>.
+          </h2>
+        </Reveal>
 
-            <h2 className="font-display mx-auto max-w-2xl text-3xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-              Masz pomysł? Zróbmy z niego{" "}
-              <span className="accent-serif text-gradient">produkt</span>.
-            </h2>
-            <p className="mx-auto mt-5 max-w-lg text-lg text-mist">
+        <div className="mt-14 grid gap-10 border-t border-paper/15 pt-10 lg:grid-cols-[1fr_auto] lg:items-end">
+          <Reveal delay={100}>
+            <p className="max-w-md text-lg text-paper/70">
               Bezpłatna konsultacja, konkretna wycena i plan działania w 24
               godziny. Bez zobowiązań.
             </p>
-
-            <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <a href="mailto:hello@paggini.studio" className="btn btn-primary w-full sm:w-auto">
-                hello@paggini.studio
-              </a>
-              <a href="tel:+48500600700" className="btn btn-ghost w-full sm:w-auto">
+            <div className="mt-8 flex flex-col gap-4">
+              <Magnetic strength={0.2}>
+                <a
+                  href="mailto:hello@paggini.studio"
+                  data-cursor
+                  className="display underline-flame text-3xl sm:text-5xl"
+                >
+                  hello@paggini.studio
+                </a>
+              </Magnetic>
+              <a href="tel:+48500600700" className="mono text-lg text-paper/70" data-cursor>
                 +48 500 600 700
               </a>
             </div>
+          </Reveal>
 
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-mist">
-              <span>⏱ Odpowiedź w 24h</span>
-              <span>✦ Umowa i faktura VAT</span>
-              <span>🇵🇱 Zespół w Polsce</span>
-            </div>
-          </div>
-        </Reveal>
+          <Reveal delay={180} className="flex flex-col gap-3">
+            <span className="mono flex items-center gap-3 text-xs text-paper/60">
+              <span className="h-1.5 w-1.5 bg-flame" /> Odpowiedź w 24h
+            </span>
+            <span className="mono flex items-center gap-3 text-xs text-paper/60">
+              <span className="h-1.5 w-1.5 bg-flame" /> Umowa i faktura VAT
+            </span>
+            <span className="mono flex items-center gap-3 text-xs text-paper/60">
+              <span className="h-1.5 w-1.5 bg-flame" /> Zespół w Polsce
+            </span>
+          </Reveal>
+        </div>
       </div>
     </section>
   );
