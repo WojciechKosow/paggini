@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Sora, Instrument_Serif } from "next/font/google";
+import { Geist, Bricolage_Grotesque, Space_Mono } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -7,23 +7,22 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const sora = Sora({
-  variable: "--font-sora",
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
 });
 
-const instrument = Instrument_Serif({
-  variable: "--font-instrument",
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
   subsets: ["latin"],
-  weight: "400",
-  style: "italic",
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
   title: "paggini — studio produktów cyfrowych",
   description:
-    "Projektujemy i budujemy dopracowane produkty cyfrowe: strony internetowe, systemy webowe i aplikacje mobilne. Nowoczesny design, dbałość o detal, mierzalny efekt.",
+    "Projektujemy i budujemy dopracowane produkty cyfrowe: strony internetowe, systemy webowe i aplikacje mobilne. Rzemiosło, charakter i mierzalny efekt.",
   keywords: [
     "strony internetowe",
     "systemy webowe",
@@ -44,7 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pl"
-      className={`${geistSans.variable} ${sora.variable} ${instrument.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${bricolage.variable} ${spaceMono.variable} h-full antialiased`}
     >
       <body className="min-h-full">{children}</body>
     </html>

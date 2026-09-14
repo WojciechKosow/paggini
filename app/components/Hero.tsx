@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import Magnetic from "./Magnetic";
+
+const WORDS = ["Strony.", "Systemy.", "Aplikacje."];
 
 const STATS = [
-  { value: 120, suffix: "+", label: "wdrożonych projektów" },
-  { value: 8, suffix: " lat", label: "na rynku" },
+  { value: 120, suffix: "+", label: "projektów" },
+  { value: 8, suffix: "", label: "lat na rynku" },
   { value: 98, suffix: "%", label: "klientów wraca" },
-  { value: 40, suffix: "+", label: "specjalistów w zespole" },
+  { value: 40, suffix: "+", label: "specjalistów" },
 ];
 
 function useCountUp(target: number, run: boolean, duration = 1400) {
@@ -17,8 +20,7 @@ function useCountUp(target: number, run: boolean, duration = 1400) {
     const start = performance.now();
     const tick = (now: number) => {
       const t = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
-      setValue(Math.round(target * eased));
+      setValue(Math.round(target * (1 - Math.pow(1 - t, 3))));
       if (t < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -27,136 +29,99 @@ function useCountUp(target: number, run: boolean, duration = 1400) {
   return value;
 }
 
-function Stat({
-  value,
-  suffix,
-  label,
-  run,
-}: {
-  value: number;
-  suffix: string;
-  label: string;
-  run: boolean;
-}) {
+function Stat({ value, suffix, label, run }: (typeof STATS)[number] & { run: boolean }) {
   const n = useCountUp(value, run);
   return (
-    <div>
-      <div className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+    <div className="flex flex-col gap-1">
+      <div className="display text-4xl font-extrabold sm:text-5xl">
         {n}
-        <span className="text-gradient">{suffix}</span>
+        <span className="flame">{suffix}</span>
       </div>
-      <div className="mt-1 text-sm text-mist">{label}</div>
+      <div className="label">{label}</div>
     </div>
   );
 }
 
 export default function Hero() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [statsRun, setStatsRun] = useState(false);
-
-  // Subtle parallax on the aurora orbs
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    let frame = 0;
-    const onMove = (e: MouseEvent) => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        const x = (e.clientX / window.innerWidth - 0.5) * 2;
-        const y = (e.clientY / window.innerHeight - 0.5) * 2;
-        el.style.setProperty("--px", `${x * 22}px`);
-        el.style.setProperty("--py", `${y * 22}px`);
-      });
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(frame);
-    };
-  }, []);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setStatsRun(true), 500);
+    const t = setTimeout(() => setMounted(true), 60);
     return () => clearTimeout(t);
   }, []);
 
   return (
-    <section id="top" ref={ref} className="relative overflow-hidden pt-40 pb-24">
-      {/* Aurora background */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div
-          className="animate-aurora absolute -top-40 left-1/2 h-[46rem] w-[46rem] -translate-x-1/2 rounded-full opacity-60 blur-[120px]"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(139,92,246,0.55), transparent 60%)",
-            transform: "translate(calc(-50% + var(--px,0px)), var(--py,0px))",
-          }}
-        />
-        <div
-          className="animate-aurora-2 absolute -right-24 top-24 h-[32rem] w-[32rem] rounded-full opacity-50 blur-[120px]"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(34,211,238,0.45), transparent 60%)",
-          }}
-        />
-        <div
-          className="animate-aurora absolute -left-24 top-40 h-[30rem] w-[30rem] rounded-full opacity-40 blur-[120px]"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(217,70,239,0.45), transparent 60%)",
-          }}
-        />
-        <div className="bg-grid mask-fade absolute inset-0 opacity-[0.35]" />
-      </div>
+    <section id="top" className="relative overflow-hidden">
+      <div className="grid-lines pointer-events-none absolute inset-0 opacity-60" />
 
-      <div className="mx-auto max-w-6xl px-5">
-        <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-          <div
-            className="inline-flex items-center gap-2 rounded-full border border-line bg-white/[0.03] px-4 py-1.5 text-xs text-mist"
-            style={{ animation: "pop-in 0.8s both" }}
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-            </span>
-            Przyjmujemy projekty na Q1 2026
-          </div>
+      <div className="relative mx-auto max-w-[1400px] px-5 pb-14 pt-32 sm:px-8 sm:pt-40">
+        {/* meta bar */}
+        <div
+          className={`flex flex-wrap items-center justify-between gap-3 border-b border-line-2 pb-5 transition-opacity duration-700 ${
+            mounted ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <span className="label">Studio produktów cyfrowych</span>
+          <span className="label hidden sm:block">Warszawa — PL</span>
+          <span className="label flex items-center gap-2">
+            <span className="inline-block h-2 w-2 animate-pulse bg-flame" />
+            Dostępni — Q1 2026
+          </span>
+        </div>
 
-          <h1
-            className="font-display mt-7 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl"
-            style={{ animation: "pop-in 0.9s 0.05s both" }}
-          >
-            <span className="text-gradient-soft">Strony, systemy</span>
-            <br />i aplikacje, które{" "}
-            <span className="accent-serif text-gradient">robią wrażenie</span>.
+        {/* headline */}
+        <div className={`mt-10 grid gap-8 lg:grid-cols-12 lg:gap-10 ${mounted ? "is-visible" : ""}`}>
+          <h1 className="display col-span-12 lg:col-span-8">
+            {WORDS.map((w, i) => (
+              <span key={w} className="rise-mask">
+                <span
+                  className="rise block"
+                  style={{
+                    ["--reveal-delay" as string]: `${i * 120}ms`,
+                    fontSize: "clamp(3.2rem, 12.5vw, 11rem)",
+                  }}
+                >
+                  {w.slice(0, -1)}
+                  <span className="flame">.</span>
+                </span>
+              </span>
+            ))}
           </h1>
 
-          <p
-            className="mt-6 max-w-xl text-lg leading-relaxed text-mist"
-            style={{ animation: "pop-in 1s 0.15s both" }}
-          >
-            Jesteśmy studiem produktowym. Projektujemy i budujemy dopracowane
-            produkty cyfrowe — od landing page&apos;y, przez systemy webowe, po
-            aplikacje mobilne. Nowocześnie, z dbałością o każdy detal.
-          </p>
+          <div className="col-span-12 flex flex-col justify-end lg:col-span-4">
+            <p
+              className={`max-w-sm text-lg leading-relaxed text-ink-soft transition-all delay-500 duration-700 ${
+                mounted ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
+              }`}
+            >
+              Studio produktowe. Projektujemy i kodujemy dopracowane produkty
+              cyfrowe — od pierwszego szkicu po wdrożenie. Bez szablonów, bez
+              kompromisów w detalu.
+            </p>
 
-          <div
-            className="mt-9 flex flex-col items-center gap-3 sm:flex-row"
-            style={{ animation: "pop-in 1.1s 0.25s both" }}
-          >
-            <a href="#portfolio" className="btn btn-primary w-full sm:w-auto">
-              Zobacz portfolio
-            </a>
-            <a href="#kontakt" className="btn btn-ghost w-full sm:w-auto">
-              Umów bezpłatną rozmowę
-            </a>
+            <div
+              className={`mt-8 flex flex-col gap-3 transition-all delay-[650ms] duration-700 sm:flex-row ${
+                mounted ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
+              }`}
+            >
+              <Magnetic>
+                <a href="#portfolio" className="btn btn-ink px-7">
+                  Zobacz prace
+                </a>
+              </Magnetic>
+              <Magnetic>
+                <a href="#kontakt" className="btn btn-line px-7">
+                  Umów rozmowę
+                </a>
+              </Magnetic>
+            </div>
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="mx-auto mt-20 grid max-w-4xl grid-cols-2 gap-8 border-t border-line pt-10 md:grid-cols-4">
+        {/* stats */}
+        <div className="mt-16 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line-2 pt-10 md:grid-cols-4">
           {STATS.map((s) => (
-            <Stat key={s.label} {...s} run={statsRun} />
+            <Stat key={s.label} {...s} run={mounted} />
           ))}
         </div>
       </div>
